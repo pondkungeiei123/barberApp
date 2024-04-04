@@ -67,10 +67,8 @@ extension OnPressed on Widget {
             bottom: 0,
             child: TextButton(
               onPressed: () {
-                if (onPressed != null) {
-                  onPressed();
-                }
-              },
+                onPressed();
+                            },
               child: Container(),
             ),
           )
@@ -80,19 +78,19 @@ extension OnPressed on Widget {
 
 extension ExAlignment on Widget {
   Widget get alignTopCenter => Align(
-        child: this,
         alignment: Alignment.topCenter,
+        child: this,
       );
   Widget get alignCenter => Align(
-        child: this,
         alignment: Alignment.center,
+        child: this,
       );
   Widget get alignBottomCenter => Align(
-        child: this,
         alignment: Alignment.bottomCenter,
+        child: this,
       );
   Widget get alignBottomLeft => Align(
-        child: this,
         alignment: Alignment.bottomLeft,
+        child: this,
       );
 }

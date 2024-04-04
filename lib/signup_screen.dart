@@ -1,6 +1,6 @@
 import 'package:finalprojectbarber/components/k_components.dart';
 import 'package:finalprojectbarber/login.dart';
-import 'package:finalprojectbarber/model/user_model.dart';
+import 'package:finalprojectbarber/model/customer_model.dart';
 import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,64 +1,42 @@
-class BarberModel {
-  String shopName;
-  BarberInfo barber;
-  String seats;
-  String description;
-  double rating;
-  int goodReviews;
-  int totalScore;
-  int satisfaction;
-  String image;
-  Location location;
-  ShopStatus shopStatus;
-
-  BarberModel(
-      {required this.shopName,
-      required this.barber,
-      required this.seats,
-      required this.description,
-      required this.rating,
-      required this.goodReviews,
-      required this.totalScore,
-      required this.satisfaction,
-      required this.image,
-      required this.location,
-      required this.shopStatus});
-}
-
 class BarberInfo {
   final String barberId;
-  final String barberFullName;
+  final String barberFirstName;
+  final String barberLastName;
+  final String barberPhone;
   final String barberEmail;
-  final String barberContact;
   final String barberPassword;
-  final String roll;
+  final String barberIDCard;
+  final String barberCertificate;
+  final String barberNamelocation;
+  final double barberLatitude;
+  final double barberLongitude;
 
   BarberInfo(
       {required this.barberId,
-      required this.barberFullName,
+      required this.barberFirstName,
+      required this.barberLastName,
+      required this.barberPhone,
       required this.barberEmail,
-      required this.barberContact,
-      required this.roll,
-      required this.barberPassword});
+      required this.barberPassword,
+      required this.barberIDCard,
+      required this.barberCertificate,
+      required this.barberNamelocation,
+      required this.barberLatitude,
+      required this.barberLongitude});
 }
 
-class Location {
-  final String address;
-  final double latitude;
-  final double longitude;
+class WorkSchedule {
+  final String workScheduleID;
+  final DateTime workScheduleStartDate;
+  final DateTime workScheduleEndDate;
+  final String workScheduleNote;
+  final String workScheduleBarberID;
 
-  Location({
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-  });
+  WorkSchedule(
+      {required this.workScheduleID,
+      required this.workScheduleStartDate,
+      required this.workScheduleEndDate,
+      required this.workScheduleNote,
+      required this.workScheduleBarberID});
 }
 
-class ShopStatus {
-  final String startTime;
-  final String endTime;
-  final String status;
-
-  ShopStatus(
-      {required this.status, required this.startTime, required this.endTime});
-}

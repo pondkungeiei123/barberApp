@@ -19,7 +19,7 @@ class Header extends StatelessWidget {
         ),
         Text(
             Provider.of<DataManagerProvider>(context)
-                .currentUser
+                .getCustomerProfile
                 .customerFirstName,
             style: TextStyles.h1Style),
       ],

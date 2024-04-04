@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:finalprojectbarber/customer_homepage.dart';
 import 'package:finalprojectbarber/data_manager/data_manager.dart';
@@ -74,16 +76,17 @@ class _SplashScreen extends State<SplashScreen> {
       if (!newUser) {
         setState(() {
           loginSuccess = true;
-          roll = login.getString('roll') ?? '';
+          roll = login.getString('roll').toString();
         });
-        loginUser(
-          login.getString('email') ?? '',
-          login.getString('password') ?? '',
+        await loginUser(
+          login.getString('email').toString(),
+          login.getString('password').toString(),
           roll,
           context,
         );
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
       print('Error fetching shared preferences: $e');
       // Handle the error, such as showing an error dialog or retrying the operation.
     }
@@ -107,9 +110,9 @@ class _SplashScreen extends State<SplashScreen> {
         MaterialPageRoute(
           builder: (BuildContext context) => loginSuccess
               ? roll == 'Customer'
-                  ? customerHomePage()
-                  : barberHomePage()
-              : LoginPage(),
+                  ? const CustomerHomePage()
+                  : const BarberHomePage()
+              : const LoginPage(),
         ),
       );
     });
@@ -120,7 +123,7 @@ class _SplashScreen extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // -------------------- temp background color can be changed.... in THEME DATA
-      backgroundColor: Colors.blueGrey[900],
+      backgroundColor: Colors.orange[200],
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +135,7 @@ class _SplashScreen extends State<SplashScreen> {
           ),
           CircularProgressIndicator(
             strokeWidth: 4,
-            backgroundColor: Colors.amberAccent[400],
+            backgroundColor: Colors.blue[200],
           )
         ],
       ),

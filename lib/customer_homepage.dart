@@ -1,17 +1,15 @@
+import 'package:finalprojectbarber/screen/customer_profile_screen.dart';
 import 'package:finalprojectbarber/screen/home.dart';
-import 'package:finalprojectbarber/screen/profile.dart';
-import 'package:finalprojectbarber/screen/search.dart';
-import 'package:finalprojectbarber/screen/work.dart';
 import 'package:flutter/material.dart';
 
-class customerHomePage extends StatefulWidget {
-  const customerHomePage({Key? key}) : super(key: key);
+class CustomerHomePage extends StatefulWidget {
+  const CustomerHomePage({Key? key}) : super(key: key);
 
   @override
-  State<customerHomePage> createState() => _customerHomePageState();
+  State<CustomerHomePage> createState() => _CustomerHomePageState();
 }
 
-class _customerHomePageState extends State<customerHomePage> {
+class _CustomerHomePageState extends State<CustomerHomePage> {
   int _selectedIndex = 0;
   void _navigateBottomBar(int index) {
     setState(() {
@@ -23,9 +21,9 @@ class _customerHomePageState extends State<customerHomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       UserHome(),
-      UserWork(),
-      UserSearch(),
-      UserProfile(),
+      // UserWork(),
+      // UserSearch(),
+      const CustomerProfileScreen(),
     ];
 
     return Scaffold(
@@ -40,13 +38,13 @@ class _customerHomePageState extends State<customerHomePage> {
             255, 253, 168, 94), // Set the color when item is selected
         unselectedItemColor: const Color.fromARGB(
             255, 197, 197, 197), // Set the color for unselected items
-        items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          const BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Work'),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.search), label: 'Search'),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Profile'),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          // const BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Work'),
+          // const BottomNavigationBarItem(
+              // icon: Icon(Icons.search), label: 'Search'),
+           BottomNavigationBarItem(
+              icon: Icon(Icons.person_pin), label: 'บัญชี'),
         ],
       ),
     );

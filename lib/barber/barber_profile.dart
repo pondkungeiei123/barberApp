@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class BarberProfileScreen extends StatefulWidget {
-  const BarberProfileScreen({Key? key}) : super(key: key);
+// class BarberProfileScreen extends StatefulWidget {
+//   const BarberProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  _BarberProfileScreenState createState() => _BarberProfileScreenState();
-}
+//   @override
+//   _BarberProfileScreenState createState() => _BarberProfileScreenState();
+// }
 
-class _BarberProfileScreenState extends State<BarberProfileScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+// class _BarberProfileScreenState extends State<BarberProfileScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }

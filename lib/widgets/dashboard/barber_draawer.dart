@@ -36,10 +36,10 @@ class BarberDraawer extends StatelessWidget {
               InkWell(
                   onTap: () {
                     // print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa');
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => BarberProfileScreen()));
+                    // Navigator.push(
+                    //     context,
+                    //     CupertinoPageRoute(
+                    //         builder: (context) => BarberProfileScreen()));
                   },
                   child: drawerChild(Icons.account_circle_outlined, 'Profile')),
               InkWell(
@@ -68,8 +68,7 @@ class BarberDraawer extends StatelessWidget {
                   onPressed: () {
                     Logout().accountLogout().whenComplete(() {
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => LoginPage()),
                           (Route<dynamic> route) => false);
                     });
                   },

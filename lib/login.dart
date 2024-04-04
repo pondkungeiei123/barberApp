@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:finalprojectbarber/components/k_components.dart';
 import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:finalprojectbarber/signup_screen.dart';
@@ -22,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isBarber = false;
 
   late SharedPreferences login;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xff8471FF),
+                    color: Color.fromARGB(255, 255, 183, 77),
                   ),
                 ),
                 const SizedBox(
@@ -131,23 +133,38 @@ class _LoginPageState extends State<LoginPage> {
                     });
                     if (isBarber) {
                       try {
-                          loginUser(emailController.text, passwordController.text,
-                              'Barbers', context)
-                              .whenComplete(() => setState(() {
+                        final result = loginUser(emailController.text,
+                            passwordController.text, 'Barber', context);
+                        if (await result) {
+                          setState(() {
                             login.setString('email', emailController.text);
                             login.setString(
                                 'password', passwordController.text);
                             login.setString('roll', 'Barber');
                             login.setBool('login', false);
                             isLoading = false;
-                          }));
+                          });
+                        }
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('$e')));
-                        setState(() {
-                          isLoading = false;
-                        });
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('ข้อผิดพลาด'),
+                              content: Text('$e'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('ตกลง'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       }
+                      setState(() {
+                        isLoading = false;
+                      });
                     } else {
                       // final userProfile = await FirebaseFirestore.instance
                       //     .collection('Customer')
@@ -161,24 +178,27 @@ class _LoginPageState extends State<LoginPage> {
                       //     isLoading = false;
                       //   });
                       // }else{
-                        loginUser(emailController.text, passwordController.text,
-                            'Customer', context)
-                            .whenComplete(() => setState(() {
+                      if (await loginUser(emailController.text,
+                          passwordController.text, 'Customer', context)) {
+                        setState(() {
                           login.setString('email', emailController.text);
-                          login.setString(
-                              'password', passwordController.text);
+                          login.setString('password', passwordController.text);
                           login.setString('roll', 'Customer');
                           login.setBool('login', false);
                           isLoading = false;
-                        }));
+                        });
                       }
+                    }
+                    setState(() {
+                      isLoading = false;
+                    });
                     // }
                   },
                   minWidth: double.infinity,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  color: const Color(0xff8471FF),
+                  color: const Color.fromARGB(255, 255, 183, 77),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                     child: isLoading

@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data_manager/data_manager.dart';
-import '../php_data/firebase_data.dart';
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
-import '../widgets/dashboard/barber_list_widget.dart';
 import '../widgets/header.dart';
-import '../widgets/searching_screen.dart';
 
 class UserHome extends StatefulWidget {
   UserHome({Key? key}) : super(key: key);
@@ -44,7 +41,7 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
-    getAllBarbers(context);
+    // getAllBarbers(context);
     return Scaffold(
       body: Consumer<DataManagerProvider>(
         builder: (context, providerData, child) {
@@ -97,9 +94,9 @@ class _UserHomeState extends State<UserHome> {
                   ],
                 ),
               ),
-              Provider.of<DataManagerProvider>(context).searchingStart
-                  ? const SearchingScreen()
-                  : barbersList(providerData.getAllBarbers, context),
+              // Provider.of<DataManagerProvider>(context).searchingStart
+              //     ? const SearchingScreen()
+              //     : barbersList(providerData.getAllBarbers, context),
             ],
           );
         },

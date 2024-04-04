@@ -143,7 +143,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
                     final custId =
                         Provider.of<DataManagerProvider>(context, listen: false)
-                            .currentUser
+                            .customerProfile
                             .customerId;
                     AppointmentModel model = AppointmentModel(
                         customerId: custId,
