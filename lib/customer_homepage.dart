@@ -1,5 +1,5 @@
 import 'package:finalprojectbarber/screen/customer_profile_screen.dart';
-import 'package:finalprojectbarber/screen/home.dart';
+import 'package:finalprojectbarber/screen/customer_home.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomePage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      UserHome(),
+      CustomerHome(),
       // UserWork(),
       // UserSearch(),
       const CustomerProfileScreen(),

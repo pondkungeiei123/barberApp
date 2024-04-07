@@ -2,8 +2,6 @@ import 'package:finalprojectbarber/model/barber_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-
 class EventItem extends StatelessWidget {
   final WorkSchedule event;
   final Function() onDelete;
@@ -19,7 +17,7 @@ class EventItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-         "${DateFormat('HH:mm').format(event.workScheduleStartDate)} - ${DateFormat('HH:mm').format(event.workScheduleEndDate)}",
+        "เวลา ${DateFormat('HH:mm').format(event.workScheduleStartDate)} น. - ${DateFormat('HH:mm').format(event.workScheduleEndDate)} น.",
       ),
       subtitle: Text(
         event.workScheduleNote,

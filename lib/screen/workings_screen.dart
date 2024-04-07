@@ -12,8 +12,10 @@ import '../../data_manager/data_manager.dart';
 import '../widgets/dashboard/workings_list_widget.dart';
 
 class WorkingsPage extends StatefulWidget {
+  final String id ;
   const WorkingsPage({
     Key? key,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -21,14 +23,16 @@ class WorkingsPage extends StatefulWidget {
 }
 
 class _WorkingsPageState extends State<WorkingsPage> {
+  late String id = "";
   @override
   void initState() {
     super.initState();
+    id = widget.id;
   }
 
   @override
   Widget build(BuildContext context) {
-    getAllWorkings(context);
+    getWorkings(id, context);
     return Scaffold(
       body: Consumer<DataManagerProvider>(
         builder: (context, providerData, child) {

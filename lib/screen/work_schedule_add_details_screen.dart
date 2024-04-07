@@ -231,7 +231,8 @@ class _WorkScheduleAddDetailScreenState
                                 workScheduleStartDate: _startTime,
                                 workScheduleEndDate: _endTime,
                                 workScheduleNote: noteController.text,
-                                workScheduleBarberID: '');
+                                workScheduleBarberID: '',
+                                workScheduleStatus: 0);
 
                             if (await addWorkSchedule(model, context)) {
                               setState(() {

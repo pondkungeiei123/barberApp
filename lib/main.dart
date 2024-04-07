@@ -7,11 +7,13 @@ import 'package:finalprojectbarber/barber_homepage.dart';
 import 'package:finalprojectbarber/login.dart';
 import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('th_TH', null);
   runApp(const MyApp());
 }
 

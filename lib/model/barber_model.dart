@@ -31,12 +31,35 @@ class WorkSchedule {
   final DateTime workScheduleEndDate;
   final String workScheduleNote;
   final String workScheduleBarberID;
+  final int workScheduleStatus;
 
   WorkSchedule(
       {required this.workScheduleID,
       required this.workScheduleStartDate,
       required this.workScheduleEndDate,
       required this.workScheduleNote,
-      required this.workScheduleBarberID});
+      required this.workScheduleBarberID,
+      required this.workScheduleStatus});
 }
 
+class WorkingsModel {
+  final String workingsId;
+  final String workingsPhoto;
+  final String workingsBarberID;
+
+  WorkingsModel({
+    required this.workingsId,
+    required this.workingsPhoto,
+    required this.workingsBarberID,
+  });
+}
+
+class WorkScheduleModel {
+  BarberInfo barber;
+  WorkSchedule workSchedule;
+
+  WorkScheduleModel({
+    required this.barber,
+    required this.workSchedule,
+  });
+}

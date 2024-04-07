@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
 
-import 'package:finalprojectbarber/model/workings_model.dart';
 import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:finalprojectbarber/theme/extention.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../model/barber_model.dart';
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
 import '../theme/theme.dart';

@@ -2,7 +2,6 @@ import 'package:finalprojectbarber/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../barber/barber_profile.dart';
 import '../logout.dart';
 
 class BarberDraawer extends StatelessWidget {

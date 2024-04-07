@@ -1,13 +1,13 @@
 import 'dart:core';
 
-import 'package:finalprojectbarber/model/workings_model.dart';
+import 'package:finalprojectbarber/model/booking_model.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../model/appointment_model.dart';
 import '../model/barber_model.dart';
 
 import '../model/customer_model.dart';
-
+import '../model/hair_model.dart';
 
 class DataManagerProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -15,11 +15,14 @@ class DataManagerProvider extends ChangeNotifier {
   late List<BarberInfo> allBarbers;
 
   late List<WorkingsModel> allWorkings = [];
-  late List<WorkSchedule> allWorkSchedule = [];
+  late List<BookingModel> allBarberBooking = [];
+  late List<WorkScheduleModel> allWorkSchedule = [];
   late List<LocationInfo> allLocation = [];
+  late List<HairModel> allHair = [];
   List<WorkingsModel> searchListWorkings = [];
 
   List<BarberInfo> searchList = [];
+  List<WorkScheduleModel> searchListworkschedule = [];
 
   late BarberInfo barberInfo;
 
@@ -83,40 +86,55 @@ class DataManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAllWorkSchedule(List<WorkSchedule> workScheduleMapList) {
-    allWorkSchedule = workScheduleMapList;
+  void setAllBarberBookings(List<BookingModel> bookingMapList) {
+    allBarberBooking = bookingMapList;
     notifyListeners();
   }
 
+  void setAllWorkSchedule(List<WorkScheduleModel> workScheduleMapList) {
+    allWorkSchedule = workScheduleMapList;
+    notifyListeners();
+  }
 
   void setAllLocation(List<LocationInfo> locationMapList) {
     allLocation = locationMapList;
     notifyListeners();
   }
 
-  List<WorkSchedule> get getAllWorkSchedule => allWorkSchedule;
+  void setAllHairs(List<HairModel> hairMapList) {
+    allHair = hairMapList;
+    notifyListeners();
+  }
+
+  List<WorkScheduleModel> get getAllWorkSchedule => allWorkSchedule;
+  List<BookingModel> get getAllBarberBooking => allBarberBooking;
   List<LocationInfo> get getAllLocation => allLocation;
   List<WorkingsModel> get getAllWorkings => allWorkings;
 
+  List<HairModel> get getAllHairs => allHair;
+
   List<BarberInfo> get getAllBarbers => allBarbers;
 
+  List<WorkScheduleModel> get getSearchList => searchListworkschedule;
+
   void getSearch(String searchKey) {
-    allBarbers.forEach((element) {
-      if (element.barberFirstName
+    allWorkSchedule.forEach((element) {
+      if (element.barber.barberFirstName
               .toLowerCase()
               .startsWith(searchKey.toLowerCase()) ||
-          element.barberFirstName.startsWith(searchKey.toLowerCase())) {
+          element.barber.barberFirstName.startsWith(searchKey.toLowerCase())) {
         searchResult(element);
       }
     });
   }
 
-  void searchResult(BarberInfo barberModel) {
-    searchList.add(barberModel);
+  void searchResult(WorkScheduleModel Model) {
+    searchListworkschedule.add(Model);
     notifyListeners();
   }
 
-  List<BarberInfo> get getSearchList => searchList;
+  List<WorkScheduleModel> get getSearchListworkschedule =>
+      searchListworkschedule;
 
   void setIsSearching(bool value) {
     isSearching = value;

@@ -1,6 +1,7 @@
-import 'package:finalprojectbarber/model/workings_model.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../model/barber_model.dart';
 import '../workings_tile.dart';
 
 // ignore: non_constant_identifier_names

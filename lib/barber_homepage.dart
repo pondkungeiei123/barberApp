@@ -1,4 +1,3 @@
-import 'package:finalprojectbarber/screen/barber/barber_dashboard.dart';
 import 'package:finalprojectbarber/screen/barber_profile_screen.dart';
 import 'package:finalprojectbarber/screen/work_schedule_screen.dart';
 import 'package:finalprojectbarber/screen/workings_screen.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'data_manager/data_manager.dart';
+import 'screen/barber_booking_screen.dart';
 
 // ignore: camel_case_types
 class BarberHomePage extends StatefulWidget {
@@ -30,10 +30,10 @@ class _BarberHomePageState extends State<BarberHomePage> {
         .barberProfile
         .barberId;
     final List<Widget> pages = [
-      BarberDashboard(),
+      BarberBookingPage(id : id),
       WorkSchedulePage(id: id),
       // UserSearch(),
-      const WorkingsPage(),
+      WorkingsPage(id : id),
       const BarberProfileScreen(),
     ];
 
@@ -48,7 +48,8 @@ class _BarberHomePageState extends State<BarberHomePage> {
         unselectedItemColor: const Color.fromARGB(255, 197, 197, 197),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'ตารางงาน'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month), label: 'ตารางงาน'),
           // BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
               icon: Icon(Icons.workspace_premium), label: 'ผลงาน'),

@@ -75,6 +75,7 @@ class _WorkSchedulePageState extends State<WorkSchedulePage> {
                 workScheduleEndDate: DateTime.parse(workSchedule['enddate']),
                 workScheduleNote: workSchedule['note'].toString(),
                 workScheduleBarberID: workSchedule['ba_id'].toString(),
+                workScheduleStatus: workSchedule['status'] as int,
               );
               final day = DateTime.utc(
                   event.workScheduleStartDate.year,

@@ -13,15 +13,13 @@ class Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          "สวัสดี,",
-          style: TextStyles.title,
+        const SizedBox(
+          height: 30.0,
         ),
         Text(
-            Provider.of<DataManagerProvider>(context)
-                .getCustomerProfile
-                .customerFirstName,
-            style: TextStyles.h1Style),
+          "สวัสดี ,คุณ ${Provider.of<DataManagerProvider>(context).getCustomerProfile.customerFirstName}",
+          style: TextStyles.titleMedium,
+        ),
       ],
     ).p16;
   }

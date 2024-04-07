@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finalprojectbarber/model/workings_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../model/barber_model.dart';
 import '../php_data/php_data.dart';
 import '../screen/photo_view_page.dart';
 
@@ -65,7 +65,7 @@ Widget workingsTile(WorkingsModel model, int index, BuildContext context) {
                       ),
                       TextButton(
                         onPressed: () {
-                          deleteWorkings(
+                          deleteWorkings(model.workingsBarberID,
                               model.workingsId, model.workingsPhoto, context);
                         },
                         child: const Text('ลบ'),

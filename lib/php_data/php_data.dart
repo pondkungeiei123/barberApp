@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:finalprojectbarber/barber_homepage.dart';
 import 'package:finalprojectbarber/login.dart';
-import 'package:finalprojectbarber/model/workings_model.dart';
+import 'package:finalprojectbarber/model/booking_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +15,10 @@ import '../model/barber_model.dart';
 import '../model/customer_model.dart';
 import 'dart:convert';
 
+import '../model/hair_model.dart';
+
 const server =
-    "https://c6c5-2403-6200-8837-7557-5c0a-a72f-443f-dcc9.ngrok-free.app/BBapi";
+    "https://d93f-2403-6200-8837-7557-615d-b93f-f596-5109.ngrok-free.app/BBapi";
 
 Future<void> addCustomerProfileData(
     CustomerInfo user, BuildContext context) async {
@@ -188,11 +190,8 @@ Future<bool> getBarberProfile(email, BuildContext context) async {
   }
 }
 
-Future<void> getAllWorkings(BuildContext context) async {
+Future<void> getWorkings(String id, BuildContext context) async {
   List<WorkingsModel> workingsList = [];
-  final String id = Provider.of<DataManagerProvider>(context, listen: false)
-      .barberProfile
-      .barberId;
   try {
     final url = Uri.parse('$server/get_all_workings.php/?id=$id');
     final response = await http.get(url);
@@ -219,37 +218,131 @@ Future<void> getAllWorkings(BuildContext context) async {
   }
 }
 
-// Future<void> getAllWorkSchedule(BuildContext context) async {
-//   List<WorkSchedule> workScheduleList = [];
-//   final String id = Provider.of<DataManagerProvider>(context, listen: false)
-//       .barberProfile
-//       .barberId;
-//   try {
-//     final url = Uri.parse('$server/get_workSchedule.php/?id=$id');
-//     final response = await http.get(url);
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> data = json.decode(response.body);
-//       if (data['result'] == 1) {
-//         var workScheduleData = data['data'];
-//         if (workScheduleData is List) {
-//           for (var workSchedule in workScheduleData) {
-//             workScheduleList.add(WorkSchedule(
-//               workScheduleID: workSchedule['id'].toString(),
-//               workScheduleStartDate: DateTime.parse(workSchedule['startdate']),
-//               workScheduleEndDate: DateTime.parse(workSchedule['enddate']),
-//               workScheduleNote: workSchedule['note'].toString(),
-//               workScheduleBarberID: workSchedule['ba_id'].toString(),
-//             ));
-//           }
-//         }
-//         Provider.of<DataManagerProvider>(context, listen: false)
-//             .setAllWorkSchedule(workScheduleList);
-//       }
-//     }
-//   } catch (e) {
-//     showErrorDialog('$e', context);
-//   }
-// }
+Future<void> getBarberBooking(String id, BuildContext context) async {
+  List<BookingModel> bookingList = [];
+  try {
+    final url = Uri.parse('$server/get_barber_booking.php/?id=$id');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        var bookingData = data['data'];
+        if (bookingData is List) {
+          for (var booking in bookingData) {
+            bookingList.add(BookingModel(
+              booking: BookingInfo(
+                  bookingId: booking['bk_id'].toString(),
+                  customerId: booking['cus_id'].toString(),
+                  bookingPrice: booking['price'] as int,
+                  bookingStatus: booking['status'] as int,
+                  workScheduleId: booking['ws_id'].toString(),
+                  locationId: booking['lo_id'].toString(),
+                  hairId: booking['hair_id'].toString(),
+                  startTime: DateTime.parse(booking['bk_startdate']),
+                  endTime: DateTime.parse(booking['bk_enddate'])),
+              location: LocationInfo(
+                  locationCusId: booking['cus_id'].toString(),
+                  locationId: booking['lo_id'].toString(),
+                  locationLatitude: booking['latitude'] as double,
+                  locationLongitude: booking['longitude'] as double,
+                  locationName: booking['namelocation'].toString()),
+              customer: CustomerInfo(
+                  customerId: booking['cus_id'].toString(),
+                  customerFirstName: booking['name'].toString(),
+                  customerLastName: booking['lastname'].toString(),
+                  customerEmail: "",
+                  customerPhone: booking['phone'].toString(),
+                  customerPassword: ''),
+              hair: HairModel(
+                  hairId: booking['hair_id'].toString(),
+                  hairName: booking['hair_name'].toString(),
+                  hairPrice: booking['hair_price'] as int),
+              workScheduleStartDate: DateTime.parse(booking['ws_startdate']),
+              workScheduleEndDate: DateTime.parse(booking['ws_enddate']),
+            ));
+          }
+        }
+        Provider.of<DataManagerProvider>(context, listen: false)
+            .setAllBarberBookings(bookingList);
+      } else {
+        showErrorDialog(data['message'], context);
+      }
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
+
+Future<void> getAllHairs(BuildContext context) async {
+  List<HairModel> hairList = [];
+  try {
+    final url = Uri.parse('$server/get_hair.php');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        var hairData = data['data'];
+        if (hairData is List) {
+          for (var hair in hairData) {
+            hairList.add(HairModel(
+              hairId: hair['id'].toString(),
+              hairName: hair['name'].toString(),
+              hairPrice: hair['price'].toInt(),
+            ));
+          }
+        }
+        Provider.of<DataManagerProvider>(context, listen: false)
+            .setAllHairs(hairList);
+      }
+    }
+  } catch (e) {
+    // showErrorDialog('$e', context);
+  }
+}
+
+Future<void> getAllWorkSchedule(BuildContext context) async {
+  List<WorkScheduleModel> workScheduleList = [];
+  try {
+    final url = Uri.parse('$server/get_all_workSchedule.php');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        var workScheduleData = data['data'];
+        if (workScheduleData is List) {
+          for (var work in workScheduleData) {
+            workScheduleList.add(WorkScheduleModel(
+              barber: BarberInfo(
+                  barberId: work['ba_id'].toString(),
+                  barberFirstName: work['name'].toString(),
+                  barberLastName: work['lastname'].toString(),
+                  barberCertificate: work['certificate'].toString(),
+                  barberEmail: work['email'].toString(),
+                  barberPhone: work['phone'].toString(),
+                  barberIDCard: work['idcard'].toString(),
+                  barberNamelocation: work['namelocation'].toString(),
+                  barberLatitude: work['latitude'] as double,
+                  barberLongitude: work['longitude'] as double,
+                  barberPassword: ""),
+              workSchedule: WorkSchedule(
+                workScheduleID: work['ws_id'].toString(),
+                workScheduleStartDate: DateTime.parse(work['startdate']),
+                workScheduleEndDate: DateTime.parse(work['enddate']),
+                workScheduleNote: work['note'].toString(),
+                workScheduleBarberID: work['ba_id'].toString(),
+                workScheduleStatus: work['status'] as int,
+              ),
+            ));
+          }
+        }
+        Provider.of<DataManagerProvider>(context, listen: false)
+            .setAllWorkSchedule(workScheduleList);
+      }
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
 
 Future<void> getAllLocation(BuildContext context) async {
   List<LocationInfo> locationList = [];
@@ -319,7 +412,7 @@ Future<bool> addWorkings(
               actions: [
                 TextButton(
                   onPressed: () async {
-                    await getAllWorkings(context);
+                    await getWorkings(workings.workingsBarberID, context);
                     Navigator.pop(context);
                   },
                   child: const Text('ตกลง'),
@@ -402,6 +495,7 @@ Future<bool> addWorkSchedule(WorkSchedule model, BuildContext context) async {
         'note': model.workScheduleNote,
         'startdate': model.workScheduleStartDate.toString(),
         'enddate': model.workScheduleEndDate.toString(),
+        'status': model.workScheduleStatus.toString(),
         'ba_id': id,
       },
     );
@@ -427,6 +521,57 @@ Future<bool> addWorkSchedule(WorkSchedule model, BuildContext context) async {
         //     );
         //   },
         // );
+        return true;
+      } else {
+        showErrorDialog(data['message'], context);
+        return false;
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+      return false;
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+    return false;
+  }
+}
+
+Future<bool> addBooking(BookingInfo model, BuildContext context) async {
+  try {
+    const url = '$server/add_booking.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'ws_id': model.workScheduleId,
+        'cus_id': model.customerId.toString(),
+        'hair_id': model.hairId.toString(),
+        'lo_id': model.locationId,
+        'startdate': model.startTime.toString(),
+        'status': model.bookingStatus.toString(),
+        'price': model.bookingPrice.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getAllWorkSchedule(context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
         return true;
       } else {
         showErrorDialog(data['message'], context);
@@ -645,7 +790,7 @@ Future<void> editProfileCustomer(
 }
 
 Future<void> deleteWorkings(
-    String id, String photo, BuildContext context) async {
+    String barberId, String id, String photo, BuildContext context) async {
   try {
     final url = '$server/delete_workings.php?id=$id&photo=$photo';
     final response = await http.get(Uri.parse(url));
@@ -663,7 +808,7 @@ Future<void> deleteWorkings(
               actions: [
                 TextButton(
                   onPressed: () async {
-                    await getAllWorkings(context);
+                    await getWorkings(barberId, context);
                     Navigator.pop(context);
                   },
                   child: const Text('ตกลง'),
@@ -759,6 +904,8 @@ Future<bool> deleteWorkSchedule(String id, BuildContext context) async {
     return false;
   }
 }
+
+
 
 void showErrorDialog(String message, context) {
   showDialog(

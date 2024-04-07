@@ -31,8 +31,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.example.finalprojectbarber"
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
-
+    ndkVersion "26.2.11394342"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -77,3 +76,4 @@ flutter {
 }
 
 dependencies {}
+

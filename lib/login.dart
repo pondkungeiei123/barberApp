@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF8499F0)),
+                            color: Colors.orangeAccent),
                       ),
                     )
                   ],

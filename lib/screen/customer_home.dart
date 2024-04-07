@@ -1,4 +1,6 @@
+import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:finalprojectbarber/theme/extention.dart';
+import 'package:finalprojectbarber/widgets/header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,16 +8,18 @@ import 'package:provider/provider.dart';
 import '../data_manager/data_manager.dart';
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
-import '../widgets/header.dart';
+import '../widgets/WorkSchedule_searching_screen.dart';
+import '../widgets/dashboard/workschedule_list_widget .dart';
 
-class UserHome extends StatefulWidget {
-  UserHome({Key? key}) : super(key: key);
+
+class CustomerHome extends StatefulWidget {
+  CustomerHome({Key? key}) : super(key: key);
 
   @override
-  _UserHomeState createState() => _UserHomeState();
+  _CustomerHomeState createState() => _CustomerHomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _CustomerHomeState extends State<CustomerHome> {
   bool searchingStart = false;
 
   TextEditingController textController = TextEditingController();
@@ -41,7 +45,7 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
-    // getAllBarbers(context);
+    getAllWorkSchedule(context);
     return Scaffold(
       body: Consumer<DataManagerProvider>(
         builder: (context, providerData, child) {
@@ -50,7 +54,7 @@ class _UserHomeState extends State<UserHome> {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    const Header(),
+                    Header(),
                     Container(
                       height: 55,
                       margin: const EdgeInsets.symmetric(
@@ -64,24 +68,25 @@ class _UserHomeState extends State<UserHome> {
                           BoxShadow(
                             color: LightColor.grey.withOpacity(.8),
                             blurRadius: 15,
-                            offset: Offset(5, 5),
+                            offset: const Offset(5, 5),
                           )
                         ],
                       ),
                       child: TextField(
                         controller: textController,
                         onChanged: (value) {
-                          print(value);
+                          // print(value);
                         },
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16),
                           border: InputBorder.none,
                           hintText: "Search...",
                           hintStyle: TextStyles.body.subTitleColor,
                           suffixIcon: SizedBox(
                             width: 50,
-                            child: Icon(Icons.search, color: LightColor.purple)
+                            child: const Icon(Icons.search,
+                                    color: LightColor.purple)
                                 .alignCenter
                                 .ripple(
                                   () {},
@@ -94,9 +99,9 @@ class _UserHomeState extends State<UserHome> {
                   ],
                 ),
               ),
-              // Provider.of<DataManagerProvider>(context).searchingStart
-              //     ? const SearchingScreen()
-              //     : barbersList(providerData.getAllBarbers, context),
+              Provider.of<DataManagerProvider>(context).searchingStart
+                  ? const WorkScheduleSearchingScreen()
+                  : WorkScheduleList(providerData.getAllWorkSchedule, context),
             ],
           );
         },
