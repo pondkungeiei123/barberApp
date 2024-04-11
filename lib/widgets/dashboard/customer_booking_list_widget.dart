@@ -1,11 +1,13 @@
 import 'package:finalprojectbarber/model/booking_model.dart';
 import 'package:finalprojectbarber/theme/extention.dart';
-import 'package:finalprojectbarber/widgets/barber_booking_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../customer_booking_tile.dart';
+
 // ignore: non_constant_identifier_names
-Widget BarberBookingList(List<BarberBookingModel> model, BuildContext context) {
+Widget CustomerBookingList(
+    List<CustomerBookingModel> model, BuildContext context) {
   return SliverList(
     delegate: SliverChildListDelegate(
       [
@@ -28,17 +30,19 @@ Widget BarberBookingList(List<BarberBookingModel> model, BuildContext context) {
           ],
         ).hP16,
         model.isEmpty
-            ? const Center(child: Text("ไม่มีการจอง"))
-            : getBarberBookingWidgetList(model, context)
+            ? const Center(
+                child: Text("ไม่มีการจอง"),
+              )
+            : getCustomerBookingWidgetList(model, context)
       ],
     ),
   );
 }
 
-Widget getBarberBookingWidgetList(
-    List<BarberBookingModel> barberbookingDataList, BuildContext context) {
+Widget getCustomerBookingWidgetList(
+    List<CustomerBookingModel> dataList, BuildContext context) {
   return Column(
-      children: barberbookingDataList.map((x) {
-    return BarberBookingTile(x, context);
+      children: dataList.map((x) {
+    return CustomerBookingTile(x, context);
   }).toList());
 }

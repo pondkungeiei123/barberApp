@@ -1,8 +1,9 @@
 import 'package:finalprojectbarber/model/customer_model.dart';
 
+import 'barber_model.dart';
 import 'hair_model.dart';
 
-class BookingModel {
+class BarberBookingModel {
   BookingInfo booking;
   LocationInfo location;
   CustomerInfo customer;
@@ -10,7 +11,7 @@ class BookingModel {
   DateTime workScheduleStartDate;
   DateTime workScheduleEndDate;
 
-  BookingModel(
+  BarberBookingModel(
       {required this.booking,
       required this.location,
       required this.customer,
@@ -19,10 +20,28 @@ class BookingModel {
       required this.workScheduleEndDate});
 }
 
+class CustomerBookingModel {
+  BookingInfo booking;
+  LocationInfo location;
+  BarberInfo barber;
+  HairModel hair;
+  DateTime workScheduleStartDate;
+  DateTime workScheduleEndDate;
+
+  CustomerBookingModel(
+      {required this.booking,
+      required this.location,
+      required this.hair,
+      required this.barber,
+      required this.workScheduleStartDate,
+      required this.workScheduleEndDate});
+}
+
 class BookingInfo {
   final String bookingId;
   final String customerId;
   final String locationId;
+  final String barberId;
   final DateTime startTime;
   final DateTime endTime;
   final int bookingStatus;
@@ -34,6 +53,7 @@ class BookingInfo {
     required this.bookingId,
     required this.locationId,
     required this.customerId,
+    required this.barberId,
     required this.bookingStatus,
     required this.hairId,
     required this.startTime,

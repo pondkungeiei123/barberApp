@@ -155,7 +155,6 @@ class _AppointmentCardState extends State<AppointmentCard> {
                         shopName: widget.shopName,
                         shopAddress: widget.shopAddress,
                         barberContact: widget.barberContact);
-
                     // setAppointment(model).whenComplete(() {
                     //   getAppointmentFromFirebase(widget.barberId, context);
                     // });

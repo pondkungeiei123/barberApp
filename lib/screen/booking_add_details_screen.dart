@@ -304,8 +304,9 @@ class _BookingAddDetailScreenState extends State<BookingAddDetailScreen> {
                 selectedLocation.locationName != "") {
               BookingInfo bookingModel = BookingInfo(
                   bookingId: "",
-                  locationId: defaultLocation.locationId,
+                  locationId: selectedLocation.locationId,
                   customerId: cusId,
+                  barberId: model.workSchedule.workScheduleBarberID,
                   bookingStatus: 0,
                   hairId: hairModel.hairId,
                   workScheduleId: model.workSchedule.workScheduleID,
@@ -318,6 +319,7 @@ class _BookingAddDetailScreenState extends State<BookingAddDetailScreen> {
                   bookingId: "",
                   locationId: defaultLocation.locationId,
                   customerId: cusId,
+                  barberId: model.workSchedule.workScheduleBarberID,
                   bookingStatus: 0,
                   hairId: hairModel.hairId,
                   workScheduleId: model.workSchedule.workScheduleID,

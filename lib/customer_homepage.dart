@@ -1,6 +1,10 @@
 import 'package:finalprojectbarber/screen/customer_profile_screen.dart';
 import 'package:finalprojectbarber/screen/customer_home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'data_manager/data_manager.dart';
+import 'screen/customer_booking_screen.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key? key}) : super(key: key);
@@ -19,9 +23,12 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final String id = Provider.of<DataManagerProvider>(context, listen: false)
+        .customerProfile
+        .customerId;
     final List<Widget> _pages = [
       CustomerHome(),
-      // UserWork(),
+      CustomerBookingPage(id: id),
       // UserSearch(),
       const CustomerProfileScreen(),
     ];
@@ -39,12 +46,12 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         unselectedItemColor: const Color.fromARGB(
             255, 197, 197, 197), // Set the color for unselected items
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          // const BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Work'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าแรก'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.query_builder), label: 'การจองคิว'),
           // const BottomNavigationBarItem(
-              // icon: Icon(Icons.search), label: 'Search'),
-           BottomNavigationBarItem(
-              icon: Icon(Icons.person_pin), label: 'บัญชี'),
+          // icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_pin), label: 'บัญชี'),
         ],
       ),
     );

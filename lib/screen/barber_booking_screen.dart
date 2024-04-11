@@ -67,7 +67,7 @@ class _BarberBookingPageState extends State<BarberBookingPage> {
                           height: 30.0,
                         ),
                         Text(
-                          "คิวจองช่าวตัดผม",
+                          "การจองคิว",
                           style: TextStyles.titleMedium,
                         ),
                       ],

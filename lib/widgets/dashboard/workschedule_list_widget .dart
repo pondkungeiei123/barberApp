@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../model/barber_model.dart';
 
-
 Widget WorkScheduleList(List<WorkScheduleModel> model, BuildContext context) {
   return SliverList(
     delegate: SliverChildListDelegate(
@@ -13,7 +12,10 @@ Widget WorkScheduleList(List<WorkScheduleModel> model, BuildContext context) {
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("ช่างตัดผม",style:  TextStyle(fontSize: 14 * 1.2, fontWeight: FontWeight.w300), ),
+            Text(
+              "ช่างตัดผม",
+              style: TextStyle(fontSize: 14 * 1.2, fontWeight: FontWeight.w300),
+            ),
             // IconButton(
             //     icon: Icon(
             //       Icons.sort,
@@ -28,7 +30,13 @@ Widget WorkScheduleList(List<WorkScheduleModel> model, BuildContext context) {
             // .p(12).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(20))),
           ],
         ).hP16,
-        getworkscheluleWidgetList(model, context)
+        model.isEmpty
+            ? const Center(
+                child: Text(
+                "ไม่มีการลงงาน",
+                style: TextStyle(fontSize: 18 * 1.2),
+              ))
+            : getworkscheluleWidgetList(model, context)
       ],
     ),
   );

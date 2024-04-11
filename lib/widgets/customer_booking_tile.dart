@@ -1,20 +1,16 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:finalprojectbarber/model/booking_model.dart';
-import 'package:finalprojectbarber/screen/barber_fare_booking_screen.dart';
+import 'package:finalprojectbarber/screen/customer_fare_booking_screen.dart';
 import 'package:finalprojectbarber/theme/extention.dart';
-import 'package:finalprojectbarber/widgets/barber_google_map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import '../screen/barber_booking_details_screen.dart';
-import '../screen/barber_payment_booking_screen.dart';
+import '../screen/customer_booking_details_screen.dart';
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
 
-Widget BarberBookingTile(BarberBookingModel model, BuildContext context) {
+Widget CustomerBookingTile(CustomerBookingModel model, BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
     decoration: BoxDecoration(
@@ -41,7 +37,7 @@ Widget BarberBookingTile(BarberBookingModel model, BuildContext context) {
             child: ListTile(
               contentPadding: const EdgeInsets.all(10),
               title: Text(
-                "${model.customer.customerFirstName} ${model.customer.customerLastName}",
+                "${model.barber.barberFirstName} ${model.barber.barberLastName}",
                 style: TextStyles.titleM.bold
                     .copyWith(color: Colors.black, fontSize: 18.0),
               ),
@@ -153,51 +149,27 @@ Widget BarberBookingTile(BarberBookingModel model, BuildContext context) {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BarBerBookingDetailScreen(model: model)));
+                      CustomerBookingDetailScreen(model: model)));
         } else if (model.booking.bookingStatus == 1) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => BarBerFareBookingScreen(model: model)));
+                  builder: (context) =>
+                      CustomerBookingDetailScreen(model: model)));
         } else if (model.booking.bookingStatus == 3) {
-          LocationPermission permission = await Geolocator.requestPermission();
-          if (permission == LocationPermission.denied ||
-              permission == LocationPermission.deniedForever) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('ข้อผิดพลาด'),
-                  content: const Text('คุณไม่อนุญาตให้เข้าถึงตำแหน่งปัจจุบัน'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('ตกลง'),
-                    ),
-                  ],
-                );
-              },
-            );
-            return;
-          } else {
-            Position position = await Geolocator.getCurrentPosition();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BarberMap(
-                        id: model.booking.bookingId,
-                        BarberLocation:
-                            LatLng(position.latitude, position.longitude),
-                        CustomerLocation: LatLng(
-                            model.location.locationLatitude,
-                            model.location.locationLongitude))));
-          }
-        } else if (model.booking.bookingStatus == 4) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CustomerFareBookingScreen(
+                        model: model,
+                      )));
+        }
+         else if (model.booking.bookingStatus == 4) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BarBerPaymentBookingScreen(model: model)));
+                      CustomerFareBookingScreen(model: model)));
         }
       },
       borderRadius: const BorderRadius.all(Radius.circular(20)),

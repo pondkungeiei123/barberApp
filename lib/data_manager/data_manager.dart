@@ -15,7 +15,8 @@ class DataManagerProvider extends ChangeNotifier {
   late List<BarberInfo> allBarbers;
 
   late List<WorkingsModel> allWorkings = [];
-  late List<BookingModel> allBarberBooking = [];
+  late List<BarberBookingModel> allBarberBooking = [];
+  late List<CustomerBookingModel> allCustomerBooking = [];
   late List<WorkScheduleModel> allWorkSchedule = [];
   late List<LocationInfo> allLocation = [];
   late List<HairModel> allHair = [];
@@ -55,11 +56,6 @@ class DataManagerProvider extends ChangeNotifier {
 
   List<AppointmentModel> appointmentList = [];
 
-  void setLoadingStatus(bool loading) {
-    isLoading = loading;
-    notifyListeners();
-  }
-
   bool get loading => isLoading;
 
   void setCustomerProfile(CustomerInfo user) {
@@ -86,8 +82,13 @@ class DataManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAllBarberBookings(List<BookingModel> bookingMapList) {
+  void setAllBarberBookings(List<BarberBookingModel> bookingMapList) {
     allBarberBooking = bookingMapList;
+    notifyListeners();
+  }
+
+  void setAllCustomerBookings(List<CustomerBookingModel> bookingMapList) {
+    allCustomerBooking = bookingMapList;
     notifyListeners();
   }
 
@@ -107,7 +108,8 @@ class DataManagerProvider extends ChangeNotifier {
   }
 
   List<WorkScheduleModel> get getAllWorkSchedule => allWorkSchedule;
-  List<BookingModel> get getAllBarberBooking => allBarberBooking;
+  List<BarberBookingModel> get getAllBarberBooking => allBarberBooking;
+  List<CustomerBookingModel> get getAllCustomerBooking => allCustomerBooking;
   List<LocationInfo> get getAllLocation => allLocation;
   List<WorkingsModel> get getAllWorkings => allWorkings;
 

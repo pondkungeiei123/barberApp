@@ -236,28 +236,28 @@
 // //   });
 // // }
 
-// // Future<void> getAppointmentFromFirebase(
-// //     String barberId, BuildContext context) async {
-// //   final result = await FirebaseFirestore.instance
-// //       .collection('Appointments')
-// //       .where('barberId', isEqualTo: barberId)
-// //       .get();
-// //   List<AppointmentModel> app = [];
-// //   for (var data in result.docs) {
-// //     app.add(AppointmentModel(
-// //         customerId: data['customerId'],
-// //         barberId: data['barberId'],
-// //         startTime: data['startTime'],
-// //         endTime: data['endTime'],
-// //         seatNo: data['seatNo'],
-// //         appointmentStatus: data['status'],
-// //         shopAddress: data['shopAddress'],
-// //         shopName: data['shopName'],
-// //         barberContact: data['barberContact']));
-// //   }
-// //   Provider.of<DataManagerProvider>(context, listen: false)
-// //       .setAppointmentList(app);
-// // }
+// Future<void> getAppointmentFromFirebase(
+//     String barberId, BuildContext context) async {
+//   final result = await FirebaseFirestore.instance
+//       .collection('Appointments')
+//       .where('barberId', isEqualTo: barberId)
+//       .get();
+//   List<AppointmentModel> app = [];
+//   for (var data in result.docs) {
+//     app.add(AppointmentModel(
+//         customerId: data['customerId'],
+//         barberId: data['barberId'],
+//         startTime: data['startTime'],
+//         endTime: data['endTime'],
+//         seatNo: data['seatNo'],
+//         appointmentStatus: data['status'],
+//         shopAddress: data['shopAddress'],
+//         shopName: data['shopName'],
+//         barberContact: data['barberContact']));
+//   }
+//   Provider.of<DataManagerProvider>(context, listen: false)
+//       .setAppointmentList(app);
+// }
 
 // // Future<void> getMyAppointmentsFromFirebase(
 // //     String myid, BuildContext context) async {

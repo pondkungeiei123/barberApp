@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
-                    color: Color.fromARGB(255, 255, 183, 77),
+                    color: Colors.orangeAccent,
                   ),
                 ),
                 const SizedBox(
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 60,
                   child: TextFormField(
                     controller: emailController,
-                    cursorColor: const Color(0xff8471FF),
+                    cursorColor: Colors.orangeAccent,
                     style: const TextStyle(fontSize: 18.0),
                     decoration: kTextFormFieldDecoration.copyWith(
                       labelText: 'Email',
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 60,
                   child: TextFormField(
                     controller: passwordController,
-                    cursorColor: const Color(0xff8471FF),
+                    cursorColor: Colors.orangeAccent,
                     style: const TextStyle(fontSize: 18.0),
                     obscureText: showPassword,
                     decoration: kTextFormFieldDecoration.copyWith(
@@ -110,8 +110,10 @@ class _LoginPageState extends State<LoginPage> {
                 //   ),
                 // ),
                 CheckboxListTile(
+                  checkColor: Colors.white,
+                  activeColor: Colors.orangeAccent,
                   contentPadding: const EdgeInsets.all(0.0),
-                  title: const Text("Login as barber"),
+                  title: const Text("เข้าสู่ระบบในฐานะช่างตัดผม"),
                   value: isBarber,
                   onChanged: (newValue) {
                     setState(() {

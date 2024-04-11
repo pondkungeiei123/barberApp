@@ -1,37 +1,36 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
-
+import 'dart:math' as math;
 import 'package:finalprojectbarber/model/booking_model.dart';
-import 'package:finalprojectbarber/php_data/php_data.dart';
 import 'package:finalprojectbarber/theme/extention.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
 import '../theme/theme.dart';
 
-class BarBerBookingDetailScreen extends StatefulWidget {
-  final BarberBookingModel model;
+class CustomerBookingDetailScreen extends StatefulWidget {
+  final CustomerBookingModel model;
 
-  const BarBerBookingDetailScreen({
+  const CustomerBookingDetailScreen({
     super.key,
     required this.model,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _BarBerBookingDetailScreenState createState() =>
-      _BarBerBookingDetailScreenState();
+  _CustomerBookingDetailScreenState createState() =>
+      _CustomerBookingDetailScreenState();
 }
 
-class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
-  late BarberBookingModel model;
+class _CustomerBookingDetailScreenState
+    extends State<CustomerBookingDetailScreen> {
+  late CustomerBookingModel model;
   Set<Marker> _markers = {};
   late double _barberLatitude = 0.0;
   late double _barberLongitude = 0.0;
@@ -39,38 +38,6 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
   late double _customerLongitude = 0.0;
   PolylinePoints polylinePoints = PolylinePoints();
   late Set<Polyline> _polylines = {};
-
-  Future<void> _getUserLocationAndAddMarker(LatLng Customerposition) async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('ข้อผิดพลาด'),
-            content: const Text('คุณไม่อนุญาตให้เข้าถึงตำแหน่งปัจจุบัน'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('ตกลง'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-    Position position = await Geolocator.getCurrentPosition();
-    if (mounted) {
-      setState(() {
-        _barberLatitude = position.latitude;
-        _barberLongitude = position.longitude;
-      });
-    }
-    await _addMarker(
-        LatLng(_barberLatitude, _barberLongitude), Customerposition);
-  }
 
   void _addPolyline(LatLng start, LatLng end) async {
     List<LatLng> polylineCoordinates = [];
@@ -128,9 +95,10 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
   void initState() {
     model = widget.model;
     super.initState();
-    _customerLatitude = widget.model.location.locationLatitude;
-    _customerLongitude = widget.model.location.locationLongitude;
-    _getUserLocationAndAddMarker(LatLng(_customerLatitude, _customerLongitude));
+    _customerLatitude = model.location.locationLatitude;
+    _customerLongitude = model.location.locationLongitude;
+    _barberLatitude = model.barber.barberLatitude;
+    _barberLongitude = model.barber.barberLongitude;
   }
 
   @override
@@ -178,7 +146,7 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    "${model.customer.customerFirstName} ${model.customer.customerLastName}",
+                                    "${model.barber.barberFirstName} ${model.barber.barberLastName}",
                                     style: titleStyle.copyWith(
                                         color: Colors.black),
                                   ),
@@ -195,10 +163,14 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                                   ),
                                 ),
                                 Text(
-                                  "รอยืนยัน",
+                                  model.booking.bookingStatus == 0
+                                      ? "รอยืนยัน"
+                                      : "ยืนยัน",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
-                                    color: Colors.blue[400],
+                                    color: model.booking.bookingStatus == 0
+                                        ? Colors.blue[400]
+                                        : Colors.green[400],
                                   ),
                                 ),
                               ],
@@ -259,7 +231,7 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  model.customer.customerPhone,
+                                  " ${model.barber.barberPhone}",
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 18.0),
                                 ),
@@ -299,7 +271,7 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  " รวม ${model.booking.bookingPrice} บาท",
+                                  " ${model.booking.bookingPrice} บาท",
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 18.0),
                                 ),
@@ -311,7 +283,7 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                           ),
                           Text("ที่อยู่", style: titleStyle).vP16,
                           const SizedBox(
-                            height: 5.0,
+                            height: 10.0,
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,7 +315,7 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                                 initialCameraPosition: CameraPosition(
                                   target: LatLng(
                                       _customerLatitude, _customerLongitude),
-                                  zoom: 15.0,
+                                  zoom: 13.5,
                                 ),
                                 markers: _markers,
                                 polylines: _polylines,
@@ -361,90 +333,91 @@ class _BarBerBookingDetailScreenState extends State<BarBerBookingDetailScreen> {
                           const SizedBox(
                             height: 20.0,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                height: 50,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.greenAccent,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "ยืนยัน",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
-                                  ),
-                                ),
-                              ).ripple(
-                                () async {
-                                  await confirmBooking(
-                                      model.booking.bookingId, context);
-                                },
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                height: 50,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.redAccent,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "ยกเลิก",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
-                                  ),
-                                ),
-                              ).ripple(
-                                () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('แจ้งเตือน'),
-                                        content:
-                                            Text("คุณต้องการยกเลิกการจองคิว?"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text(
-                                              'ยกเลิก',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              await cancelBooking(
-                                                  model.booking.bookingId,
-                                                  context);
-                                            },
-                                            child: const Text(
-                                              'ตกลง',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ],
-                          ),
+                          
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: <Widget>[
+                          //     Container(
+                          //       height: 50,
+                          //       width: 70,
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(10),
+                          //         color: Colors.greenAccent,
+                          //       ),
+                          //       child: const Center(
+                          //         child: Text(
+                          //           "ยืนยัน",
+                          //           style: TextStyle(
+                          //               color: Colors.white, fontSize: 20.0),
+                          //         ),
+                          //       ),
+                          //     ).ripple(
+                          //       () async {
+                          //         await confirmBooking(
+                          //             model.booking.bookingId, context);
+                          //       },
+                          //       borderRadius: BorderRadius.circular(10),
+                          //     ),
+                          //     const SizedBox(
+                          //       width: 10,
+                          //     ),
+                          //     Container(
+                          //       height: 50,
+                          //       width: 70,
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(10),
+                          //         color: Colors.redAccent,
+                          //       ),
+                          //       child: const Center(
+                          //         child: Text(
+                          //           "ยกเลิก",
+                          //           style: TextStyle(
+                          //               color: Colors.white, fontSize: 20.0),
+                          //         ),
+                          //       ),
+                          //     ).ripple(
+                          //       () {
+                          //         showDialog(
+                          //           context: context,
+                          //           builder: (BuildContext context) {
+                          //             return AlertDialog(
+                          //               title: const Text('แจ้งเตือน'),
+                          //               content:
+                          //                   Text("คุณต้องการยกเลิกการจองคิว?"),
+                          //               actions: [
+                          //                 TextButton(
+                          //                   onPressed: () {
+                          //                     Navigator.pop(context);
+                          //                   },
+                          //                   child: const Text(
+                          //                     'ยกเลิก',
+                          //                     style: TextStyle(
+                          //                       color: Colors.black,
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //                 TextButton(
+                          //                   onPressed: () async {
+                          //                     await cancelBooking(
+                          //                         model.booking.bookingId,
+                          //                         context);
+                          //                   },
+                          //                   child: const Text(
+                          //                     'ตกลง',
+                          //                     style: TextStyle(
+                          //                       color: Colors.red,
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             );
+                          //           },
+                          //         );
+                          //       },
+                          //       borderRadius: BorderRadius.circular(10),
+                          //     ),
+                          //   ],
+                          // ),
                           const SizedBox(
                             height: 20.0,
                           ),
@@ -483,20 +456,20 @@ int calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   return distance.toInt();
 }
 
-// double getZoomLevel(double distance) {
-//   const double mapWidth = 256.0; // ความกว้างของแผนที่ Google Maps ในหน่วยพิกเซล
-//   const double zoomMax = 21.0; // Zoom Level สูงสุดที่ Google Maps รองรับ
+double getZoomLevel(double distance) {
+  const double mapWidth = 256.0; // ความกว้างของแผนที่ Google Maps ในหน่วยพิกเซล
+  const double zoomMax = 21.0; // Zoom Level สูงสุดที่ Google Maps รองรับ
 
-//   // เริ่มต้นคำนวณ Zoom Level
-//   double equatorLength = 40075004; // ความยาวของอีกวายร์ในหน่วยเมตร
-//   double metersPerPixel = equatorLength / mapWidth; // จำนวนเมตรต่อพิกเซล
+  // เริ่มต้นคำนวณ Zoom Level
+  double equatorLength = 40075004; // ความยาวของอีกวายร์ในหน่วยเมตร
+  double metersPerPixel = equatorLength / mapWidth; // จำนวนเมตรต่อพิกเซล
 
-//   // คำนวณ Zoom Level ตามระยะทางที่กำหนด
-//   double zoom = (math.log(distance / metersPerPixel) / math.log(2)).abs();
-//   return zoom <= zoomMax
-//       ? zoom
-//       : zoomMax; // กำหนด Zoom Level สูงสุดเท่ากับ zoomMax
-// }
+  // คำนวณ Zoom Level ตามระยะทางที่กำหนด
+  double zoom = (math.log(distance / metersPerPixel) / math.log(2)).abs();
+  return zoom <= zoomMax
+      ? zoom
+      : zoomMax; // กำหนด Zoom Level สูงสุดเท่ากับ zoomMax
+}
 
 double radians(double degrees) {
   return degrees * pi / 180;

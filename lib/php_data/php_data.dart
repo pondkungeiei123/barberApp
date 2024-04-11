@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:finalprojectbarber/barber_homepage.dart';
 import 'package:finalprojectbarber/login.dart';
 import 'package:finalprojectbarber/model/booking_model.dart';
+import 'package:finalprojectbarber/model/payment_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,7 @@ import 'dart:convert';
 import '../model/hair_model.dart';
 
 const server =
-    "https://d93f-2403-6200-8837-7557-615d-b93f-f596-5109.ngrok-free.app/BBapi";
+    "https://98e0-2403-6200-8837-7557-4987-e033-6cce-d593.ngrok-free.app/BBapi";
 
 Future<void> addCustomerProfileData(
     CustomerInfo user, BuildContext context) async {
@@ -219,7 +220,7 @@ Future<void> getWorkings(String id, BuildContext context) async {
 }
 
 Future<void> getBarberBooking(String id, BuildContext context) async {
-  List<BookingModel> bookingList = [];
+  List<BarberBookingModel> bookingList = [];
   try {
     final url = Uri.parse('$server/get_barber_booking.php/?id=$id');
     final response = await http.get(url);
@@ -229,17 +230,19 @@ Future<void> getBarberBooking(String id, BuildContext context) async {
         var bookingData = data['data'];
         if (bookingData is List) {
           for (var booking in bookingData) {
-            bookingList.add(BookingModel(
+            bookingList.add(BarberBookingModel(
               booking: BookingInfo(
-                  bookingId: booking['bk_id'].toString(),
-                  customerId: booking['cus_id'].toString(),
-                  bookingPrice: booking['price'] as int,
-                  bookingStatus: booking['status'] as int,
-                  workScheduleId: booking['ws_id'].toString(),
-                  locationId: booking['lo_id'].toString(),
-                  hairId: booking['hair_id'].toString(),
-                  startTime: DateTime.parse(booking['bk_startdate']),
-                  endTime: DateTime.parse(booking['bk_enddate'])),
+                bookingId: booking['bk_id'].toString(),
+                customerId: booking['cus_id'].toString(),
+                bookingPrice: booking['price'] as int,
+                bookingStatus: booking['status'] as int,
+                workScheduleId: booking['ws_id'].toString(),
+                locationId: booking['lo_id'].toString(),
+                hairId: booking['hair_id'].toString(),
+                startTime: DateTime.parse(booking['bk_startdate']),
+                endTime: DateTime.parse(booking['bk_enddate']),
+                barberId: booking['ba_id'].toString(),
+              ),
               location: LocationInfo(
                   locationCusId: booking['cus_id'].toString(),
                   locationId: booking['lo_id'].toString(),
@@ -265,7 +268,70 @@ Future<void> getBarberBooking(String id, BuildContext context) async {
         Provider.of<DataManagerProvider>(context, listen: false)
             .setAllBarberBookings(bookingList);
       } else {
-        showErrorDialog(data['message'], context);
+        // showErrorDialog(data['message'], context);
+      }
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
+
+Future<void> getCustomerBooking(String id, BuildContext context) async {
+  List<CustomerBookingModel> bookingList = [];
+  try {
+    final url = Uri.parse('$server/get_customer_booking.php/?id=$id');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        var bookingData = data['data'];
+        if (bookingData is List) {
+          for (var booking in bookingData) {
+            bookingList.add(CustomerBookingModel(
+              booking: BookingInfo(
+                bookingId: booking['bk_id'].toString(),
+                customerId: booking['cus_id'].toString(),
+                bookingPrice: booking['price'] as int,
+                bookingStatus: booking['status'] as int,
+                workScheduleId: booking['ws_id'].toString(),
+                locationId: booking['lo_id'].toString(),
+                hairId: booking['hair_id'].toString(),
+                startTime: DateTime.parse(booking['bk_startdate']),
+                endTime: DateTime.parse(booking['bk_enddate']),
+                barberId: booking['barber_id'].toString(),
+              ),
+              location: LocationInfo(
+                  locationCusId: booking['cus_id'].toString(),
+                  locationId: booking['lo_id'].toString(),
+                  locationLatitude: booking['latitude'] as double,
+                  locationLongitude: booking['longitude'] as double,
+                  locationName: booking['namelocation'].toString()),
+              barber: BarberInfo(
+                barberId: booking['ba_id'].toString(),
+                barberFirstName: booking['ba_name'].toString(),
+                barberLastName: booking['ba_lastname'].toString(),
+                barberPhone: booking['ba_phone'].toString(),
+                barberEmail: '',
+                barberPassword: '',
+                barberIDCard: '',
+                barberCertificate: '',
+                barberNamelocation: booking['ba_namelocation'].toString(),
+                barberLatitude: booking['ba_latitude'] as double,
+                barberLongitude: booking['ba_longitude'] as double,
+              ),
+              hair: HairModel(
+                  hairId: booking['hair_id'].toString(),
+                  hairName: booking['hair_name'].toString(),
+                  hairPrice: booking['hair_price'] as int),
+              workScheduleStartDate: DateTime.parse(booking['ws_startdate']),
+              workScheduleEndDate: DateTime.parse(booking['ws_enddate']),
+            ));
+          }
+        }
+        Provider.of<DataManagerProvider>(context, listen: false)
+            .setAllCustomerBookings(bookingList);
+      } else {
+        // showErrorDialog(data['message'], context);
       }
     }
   } catch (e) {
@@ -338,6 +404,11 @@ Future<void> getAllWorkSchedule(BuildContext context) async {
         Provider.of<DataManagerProvider>(context, listen: false)
             .setAllWorkSchedule(workScheduleList);
       }
+      // showErrorDialog(data['message'], context);
+      Provider.of<DataManagerProvider>(context, listen: false)
+          .setAllWorkSchedule(workScheduleList);
+    } else {
+      showErrorDialog('ไม่สามารถติดต่อเซิร์ฟเวอร์ได้', context);
     }
   } catch (e) {
     showErrorDialog('$e', context);
@@ -536,7 +607,58 @@ Future<bool> addWorkSchedule(WorkSchedule model, BuildContext context) async {
   }
 }
 
-Future<bool> addBooking(BookingInfo model, BuildContext context) async {
+Future<bool> addPayment(
+    String ws_id, PaymentModel model, BuildContext context) async {
+  final String id = Provider.of<DataManagerProvider>(context, listen: false)
+      .barberProfile
+      .barberId;
+  try {
+    const url = '$server/add_payment.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'amount': model.paymentAmount.toString(),
+        'bk_id': model.bookingId.toString(),
+        'ws_id': ws_id,
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('แจ้งเตือน'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getBarberBooking(id, context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+        return true;
+      } else {
+        showErrorDialog(data['message'], context);
+        return false;
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+      return false;
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+    return false;
+  }
+}
+
+Future<void> addBooking(BookingInfo model, BuildContext context) async {
   try {
     const url = '$server/add_booking.php';
     final response = await http.post(
@@ -572,18 +694,195 @@ Future<bool> addBooking(BookingInfo model, BuildContext context) async {
             );
           },
         );
-        return true;
       } else {
         showErrorDialog(data['message'], context);
-        return false;
       }
     } else {
       showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
-      return false;
     }
   } catch (e) {
     showErrorDialog('$e', context);
-    return false;
+  }
+}
+
+Future<void> confirmBooking(String id, BuildContext context) async {
+  final String barberId =
+      Provider.of<DataManagerProvider>(context, listen: false)
+          .barberProfile
+          .barberId;
+  try {
+    const url = '$server/confirm_booking.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'id': id.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getBarberBooking(barberId, context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showErrorDialog(data['message'], context);
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
+
+Future<void> cancelBooking(String id, BuildContext context) async {
+  final String barberId =
+      Provider.of<DataManagerProvider>(context, listen: false)
+          .barberProfile
+          .barberId;
+  try {
+    const url = '$server/cancel_booking.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'id': id.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getBarberBooking(barberId, context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showErrorDialog(data['message'], context);
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
+
+Future<void> fateBooking(String id, BuildContext context) async {
+  final String barberId =
+      Provider.of<DataManagerProvider>(context, listen: false)
+          .barberProfile
+          .barberId;
+  try {
+    const url = '$server/fate_booking.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'id': id.toString(),
+        'ba_id': barberId.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getBarberBooking(barberId, context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showErrorDialog(data['message'], context);
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
+  }
+}
+
+Future<void> reachedBooking(String id, BuildContext context) async {
+  final String barberId =
+      Provider.of<DataManagerProvider>(context, listen: false)
+          .barberProfile
+          .barberId;
+  try {
+    const url = '$server/reached_booking.php';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'id': id.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data['result'] == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: Text(data['message']),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await getBarberBooking(barberId, context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showErrorDialog(data['message'], context);
+      }
+    } else {
+      showErrorDialog('เชื่อมต่อกับเซิร์ฟเวอร์ล้มเหลว', context);
+    }
+  } catch (e) {
+    showErrorDialog('$e', context);
   }
 }
 
@@ -904,8 +1203,6 @@ Future<bool> deleteWorkSchedule(String id, BuildContext context) async {
     return false;
   }
 }
-
-
 
 void showErrorDialog(String message, context) {
   showDialog(
