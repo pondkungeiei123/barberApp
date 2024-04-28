@@ -18,8 +18,8 @@ import 'dart:convert';
 
 import '../model/hair_model.dart';
 
-const server =
-    "https://98e0-2403-6200-8837-7557-4987-e033-6cce-d593.ngrok-free.app/BBapi";
+const server = "https://8c5f-2403-6200-8831-9ed8-c099-85cf-46b5-e244.ngrok-free.app/BBapi";
+
 
 Future<void> addCustomerProfileData(
     CustomerInfo user, BuildContext context) async {
@@ -666,6 +666,7 @@ Future<void> addBooking(BookingInfo model, BuildContext context) async {
       body: {
         'ws_id': model.workScheduleId,
         'cus_id': model.customerId.toString(),
+        'ba_id': model.barberId.toString(),
         'hair_id': model.hairId.toString(),
         'lo_id': model.locationId,
         'startdate': model.startTime.toString(),

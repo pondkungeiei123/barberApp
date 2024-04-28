@@ -114,12 +114,12 @@ Widget BarberBookingTile(BarberBookingModel model, BuildContext context) {
                                             ? "กำลังเดินทาง"
                                             : model.booking.bookingStatus == 4
                                                 ? "ถึงเป้าหมาย"
-                                                : "สำเร็จ",
+                                                : model.booking.bookingStatus == 5 ?"สำเร็จ" :"",
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               color: model.booking.bookingStatus == 0
-                                  ? Colors.blue[400]
+                                  ? const Color.fromARGB(255, 48, 71, 90)
                                   : model.booking.bookingStatus == 1
                                       ? Colors.green[400]
                                       : model.booking.bookingStatus == 2
@@ -128,7 +128,7 @@ Widget BarberBookingTile(BarberBookingModel model, BuildContext context) {
                                               ? Colors.yellow[700]
                                               : model.booking.bookingStatus == 4
                                                   ? Colors.orange[400]
-                                                  : Colors.black,
+                                                  : model.booking.bookingStatus == 5 ? Colors.green:Colors.black,
                             ),
                           ),
                         ],
